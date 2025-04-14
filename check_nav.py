@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-CHAT_IDS = os.getenv("CHAT_IDS").split(",")  # now handles multiple IDs
+CHAT_IDS = os.getenv("CHAT_IDS", "").split(",")
 NAV_THRESHOLD = 10
 NAV_URL = "https://www.nimbacecapital.com/mutual-fund/nav-nibl-sahabhagita-fund/"
 
