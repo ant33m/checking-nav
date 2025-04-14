@@ -11,7 +11,7 @@ CHAT_IDS = [
     os.getenv("CHAT_ID_2")
 ]
 
-NAV_THRESHOLD = 100
+NAV_THRESHOLD = 10
 NAV_URL = "https://www.nimbacecapital.com/mutual-fund/nav-nibl-sahabhagita-fund/"
 
 def send_telegram(message):
