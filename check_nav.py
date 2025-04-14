@@ -38,7 +38,7 @@ def main():
     nav = get_nav()
     if nav is not None:
         print(f"NIBLSF NAV = Rs. {nav}")
-        if nav <= NAV_THRESHOLD:
+        if nav >= 0:
             send_telegram(f"📉 ALERT: NIBLSF NAV is Rs. {nav} (<= Rs. {NAV_THRESHOLD})")
         else:
             print("✅ NAV is above threshold.")
