@@ -1,30 +1,28 @@
-name: Daily NAV Checker
+name: NAV Checker
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Runs at 12:00 PM Nepal Time (UTC+6)
-  workflow_dispatch:  # Allows manual runs from GitHub UI
+    - cron: '0 6 * * *'  # runs daily at 6 AM UTC
+  workflow_dispatch:
 
 jobs:
-  run-script:
+  check-nav:
     runs-on: ubuntu-latest
+    env:
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      CHAT_ID_1: ${{ secrets.CHAT_ID_1 }}
+      CHAT_ID_2: ${{ secrets.CHAT_ID_2 }}
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: 3.11
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+        run: pip install -r requirements.txt
 
       - name: Run NAV Checker
-        env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_IDS }}
         run: python check_nav.py
