@@ -2,20 +2,23 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-CHAT_ID = os.environ.get("CHAT_ID")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_IDS = os.getenv("CHAT_IDS").split(",")  # now handles multiple IDs
 NAV_THRESHOLD = 10
 NAV_URL = "https://www.nimbacecapital.com/mutual-fund/nav-nibl-sahabhagita-fund/"
 
 def send_telegram(message):
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = {"chat_id": CHAT_ID, "text": message}
-    response = requests.post(url, data=payload)
-    return response.status_code
+    for chat_id in CHAT_IDS:
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+        payload = {"chat_id": chat_id.strip(), "text": message}
+        response = requests.post(url, data=payload)
+        print(f"Sent to {chat_id.strip()} - Status: {response.status_code}")
 
 def get_nav():
     try:
-        headers = {"User-Agent": 'Mozilla/5.0'}
+        headers = {
+            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
         response = requests.get(NAV_URL, headers=headers, timeout=10)
         response.raise_for_status()
 
