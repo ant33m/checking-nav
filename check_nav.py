@@ -11,7 +11,7 @@ CHAT_IDS = [
     os.getenv("CHAT_ID_2")
 ]
 
-NAV_THRESHOLD = 10
+NAV_THRESHOLD = 100
 NAV_URL = "https://www.nimbacecapital.com/mutual-fund/nav-nibl-sahabhagita-fund/"
 
 def send_telegram(message):
@@ -51,7 +51,7 @@ def main():
     nav = get_nav()
     if nav is not None:
         print(f"NIBLSF NAV = Rs. {nav}")
-        if nav >= 0:  # always send for debug
+        if nav <= NAV_THRESHOLD:  # always send for debug
             send_telegram(f"📉 ALERT: NIBLSF NAV is Rs. {nav} (<= Rs. {NAV_THRESHOLD})")
         else:
             print("✅ NAV is above threshold.")
