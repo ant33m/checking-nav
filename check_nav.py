@@ -1,20 +1,21 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 
-# === CONFIGURATION ===
-BOT_TOKEN = "7501933104:AAFFQ-1csF7hd8L9ykSWLseHvurX2HKG0Ak"
-CHAT_ID = "5357377811"
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+CHAT_ID = os.environ.get("CHAT_ID")
 NAV_THRESHOLD = 10
 NAV_URL = "https://www.nimbacecapital.com/mutual-fund/nav-nibl-sahabhagita-fund/"
 
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {"chat_id": CHAT_ID, "text": message}
-    requests.post(url, data=payload)
+    response = requests.post(url, data=payload)
+    return response.status_code
 
 def get_nav():
     try:
-        headers = {"User-Agent": "Mozilla/5.0"}
+        headers = {"User-Agent": 'Mozilla/5.0'}
         response = requests.get(NAV_URL, headers=headers, timeout=10)
         response.raise_for_status()
 
@@ -37,7 +38,7 @@ def main():
     nav = get_nav()
     if nav is not None:
         print(f"NIBLSF NAV = Rs. {nav}")
-        if nav >= 0:
+        if nav <= NAV_THRESHOLD:
             send_telegram(f"📉 ALERT: NIBLSF NAV is Rs. {nav} (<= Rs. {NAV_THRESHOLD})")
         else:
             print("✅ NAV is above threshold.")
