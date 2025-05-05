@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-load_dotenv()  # Make sure you call this if you're using .env locally
+load_dotenv()  
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_IDS = [
@@ -16,7 +16,7 @@ NAV_URL = "https://www.nimbacecapital.com/mutual-fund/nav-nibl-sahabhagita-fund/
 
 def send_telegram(message):
     for chat_id in CHAT_IDS:
-        if chat_id:  # ensure it's not None
+        if chat_id:  
             url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
             payload = {"chat_id": chat_id.strip(), "text": message}
             response = requests.post(url, data=payload)
@@ -51,7 +51,7 @@ def main():
     nav = get_nav()
     if nav is not None:
         print(f"NIBLSF NAV = Rs. {nav}")
-        if nav <= NAV_THRESHOLD:  # always send for debug
+        if nav <= NAV_THRESHOLD:  
             send_telegram(f"📉 ALERT: NIBLSF NAV is Rs. {nav} (<= Rs. {NAV_THRESHOLD})")
         else:
             print("✅ NAV is above threshold.")
